@@ -1,12 +1,12 @@
 #include <iostream>
 #include <thread>
 #include <mutex>
-#include <atomic>
 using namespace std;
 
-#define Need_Sigaretes 100
+#define Need_Sigaretes 100	//Число итераций (сколько сигарет сделают и выкурят)
 int iteration = 0;
-atomic<bool> run = true;
+bool run = true;
+//atomic<bool> run = true;
 
 bool tabak = false;
 bool paper = false;
@@ -17,12 +17,13 @@ int statistik_matches = 0;
 int iterT = 0;
 int iterP = 0;
 int iterM = 0;
-std::mutex mtx;
+std::mutex mtx;	// мьютекс стола, стол свободен или нет
 
 int main()
 {
 	setlocale(LC_ALL, "");
 	srand(time(0));
+
 	thread smoker_tabak([]()
 		{
 			for (; run; iterT++)
@@ -32,11 +33,12 @@ int main()
 				{
 					matches = false;
 					paper = false;
-					cout << "ТАБАК выкурил сигарету!\n";
+					cout << "ТАБАК  выкурил\n";
 					statistik_tabak++;
 				}
 			}
 		});
+
 	thread smoker_paper([]()
 		{
 			for (; run; iterP++)
@@ -47,12 +49,13 @@ int main()
 					matches = false;
 					tabak = false;
 
-					cout << "БУМАГА выкурил сигарету!\n";
+					cout << "БУМАГА выкурил\n";
 					statistik_paper++;
 				}
 			}
 		});
-	thread smoker_matches([]()
+
+	thread smoker_matches([]() 
 		{
 			for (; run; iterM++)
 			{
@@ -61,7 +64,7 @@ int main()
 				{
 					paper = false;
 					tabak = false;
-					cout << "СПИЧКИ выкурил сигарету!\n";
+					cout << "СПИЧКИ выкурил\n";
 					statistik_matches++;
 				}
 			}
@@ -98,7 +101,7 @@ int main()
 	cout << endl << statistik_tabak << " - Табак - Итераций: " << iterT << endl;
 	cout << endl << statistik_paper << " - Бумаги - Итераций: " << iterP << endl;
 	cout << endl << statistik_matches << " - Спичек - Итераций: " << iterM << endl;
-	cout << endl << Need_Sigaretes << " - Сигарет всего выкурено\n";
+	cout << endl << Need_Sigaretes << " - Сигарет всего выкурено\n\n";
 	system("pause");
 	return 0;
 }
