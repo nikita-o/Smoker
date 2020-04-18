@@ -23,7 +23,7 @@
     <ProjectGuid>{995DECEB-9ED1-4BC0-8EBD-0FB57DCB1A33}</ProjectGuid>
     <RootNamespace>Smoker</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>Smokers</ProjectName>
+    <ProjectName>Smokers 1 mutex</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
