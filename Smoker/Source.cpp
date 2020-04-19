@@ -3,10 +3,9 @@
 #include <mutex>
 using namespace std;
 
-#define Need_Sigaretes 100	//Число итераций (сколько сигарет сделают и выкурят)
+#define Need_Sigaretes 100	// Number of iterations (how many cigarettes)
 int iteration = 0;
 bool run = true;
-//atomic<bool> run = true;
 
 bool tabak = false;
 bool paper = false;
@@ -17,7 +16,7 @@ int statistik_matches = 0;
 int iterT = 0;
 int iterP = 0;
 int iterM = 0;
-std::mutex mtx;	// мьютекс стола, стол свободен или нет
+std::mutex mtxTable;	// mutex table
 
 int main()
 {
@@ -28,12 +27,12 @@ int main()
 		{
 			for (; run; iterT++)
 			{
-				lock_guard<mutex> lock(mtx);
+				lock_guard<mutex> lock(mtxTable);
 				if (paper && matches)
 				{
 					matches = false;
 					paper = false;
-					cout << "ТАБАК  выкурил\n";
+					cout << "TABAK   smoke\n";
 					statistik_tabak++;
 				}
 			}
@@ -43,13 +42,13 @@ int main()
 		{
 			for (; run; iterP++)
 			{
-				lock_guard<mutex> lock(mtx);
+				lock_guard<mutex> lock(mtxTable);
 				if (tabak && matches)
 				{
 					matches = false;
 					tabak = false;
 
-					cout << "БУМАГА выкурил\n";
+					cout << "PAPER   smoke\n";
 					statistik_paper++;
 				}
 			}
@@ -59,12 +58,12 @@ int main()
 		{
 			for (; run; iterM++)
 			{
-				lock_guard<mutex> lock(mtx);
+				lock_guard<mutex> lock(mtxTable);
 				if (paper && tabak)
 				{
 					paper = false;
 					tabak = false;
-					cout << "СПИЧКИ выкурил\n";
+					cout << "MATCHEs smoke\n";
 					statistik_matches++;
 				}
 			}
@@ -72,7 +71,7 @@ int main()
 
 	for (;;)
 	{
-		lock_guard<mutex> lock(mtx);
+		lock_guard<mutex> lock(mtxTable);
 		if (statistik_tabak + statistik_paper + statistik_matches >= Need_Sigaretes)
 			break;
 		if (!paper && !tabak && !matches)
@@ -98,10 +97,10 @@ int main()
 	smoker_tabak.join();
 	smoker_paper.join();
 	smoker_matches.join();
-	cout << endl << statistik_tabak << " - Табак - Итераций: " << iterT << endl;
-	cout << endl << statistik_paper << " - Бумаги - Итераций: " << iterP << endl;
-	cout << endl << statistik_matches << " - Спичек - Итераций: " << iterM << endl;
-	cout << endl << Need_Sigaretes << " - Сигарет всего выкурено\n\n";
+	cout << endl << statistik_tabak << " - tabak - iterations: " << iterT << endl;
+	cout << endl << statistik_paper << " - paper - iterations: " << iterP << endl;
+	cout << endl << statistik_matches << " - matches - iterations: " << iterM << endl;
+	cout << endl << Need_Sigaretes << " - Cigarettes smoked\n\n";
 	system("pause");
 	return 0;
 }
